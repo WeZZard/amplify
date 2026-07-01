@@ -84,7 +84,7 @@ jobs:
       - name: Dispatch catalog sync
         if: steps.meta.outputs.skip != 'true'
         env:
-          GH_TOKEN: ${{ secrets.SKILLS_DISPATCH_TOKEN }}
+          GH_TOKEN: ${{ secrets.AMPLIFY_RELEASE_TOKEN }}
         run: |
           set -euo pipefail
           TAG="${{ steps.meta.outputs.tag }}"
