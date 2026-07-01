@@ -37,7 +37,7 @@ jobs:
 
       - name: Validate plugin
         if: steps.meta.outputs.skip != 'true'
-        run: npx --yes @anthropic-ai/claude-code@latest plugin validate . || claude plugin validate .
+        run: npx --yes @anthropic-ai/claude-code@latest plugin validate .
 
       - name: Create tag and release
         if: steps.meta.outputs.skip != 'true'

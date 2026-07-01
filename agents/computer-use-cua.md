@@ -13,7 +13,7 @@ description: >-
   MUST detect cua-driver availability before spawning and degrade to a Manual/human-gate test when it is absent.
 model: opus
 tools: mcp__cua-driver__*, Read, Grep, Glob, Bash
-mcpServers: [cua-driver]
+mcpServers: ["cua-driver"]
 ---
 
 # Cua-Driver Driver

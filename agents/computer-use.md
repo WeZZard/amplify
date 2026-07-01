@@ -11,7 +11,7 @@ description: >-
   returns exactly the response block the delegated body (spawning prompt) specifies; defines no response format of its own.
 model: opus
 tools: mcp__computer-use__*, Read, Grep, Glob, Bash
-mcpServers: [computer-use]
+mcpServers: ["computer-use"]
 ---
 
 # Computer-Use Driver
