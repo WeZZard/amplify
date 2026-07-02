@@ -229,3 +229,50 @@ details = "Choose a visual style (flow, tree, stack, table, graph) that matches 
 name = "Close with Synthesis"
 description = "End with a summary, caveats, or next steps."
 details = "Provide a short synthesis, checklist of caveats, or 'what to verify next'. Explicitly call out low-confidence areas and open questions."
+
+[skills.divide-and-conquer]
+display_name = "Divide and Conquer"
+tagline = "Break big jobs into parallel, subagent-driven task graphs"
+short_summary = "Decomposes wide fan-out work into a folded task graph run across isolated subagent contexts, with only handles crossing the orchestrator."
+full_summary = "Divide and conquer turns a large job into a folded task graph of typed nodes — agent, fn, expand, and switch — executed on the amplify engine. Independent work fans out across isolated subagent contexts while values pass by reference so payload bytes never flood the orchestrator. It supports both human-reviewed decomposition of bare prompts and direct execution of skills that ship their own authored graphs."
+
+[[skills.divide-and-conquer.highlights]]
+title = "Isolated Subagent Fan-Out"
+description = "Each parallel unit runs in its own subagent context, so wide fan-outs never degrade a single long context. One agent per unit means independent work scales horizontally instead of serially."
+
+[[skills.divide-and-conquer.highlights]]
+title = "Typed Folded Task Graph"
+description = "Graphs compose from four node kinds — agent for non-deterministic work, fn for pure transforms, expand for fan-out, and switch for branching. Every node carries an explicit output_schema and the engine validates the whole shape before running."
+
+[[skills.divide-and-conquer.highlights]]
+title = "Values by Reference, Never Bytes"
+description = "The orchestrator only handles ids and handles; payload bytes stay out of its context. Cross-node data flows through the value store, keeping the orchestrator lean and the contexts clean."
+
+[[skills.divide-and-conquer.highlights]]
+title = "Two Entry Modes"
+description = "Mode A decomposes a bare prompt into a draft graph for human review and editing before running. Mode B loads and runs a skill that ships its own authored graph plus helper modules, with no review gate."
+
+[[skills.divide-and-conquer.workflow]]
+name = "Decompose or Load"
+description = "Spawn a sub-agent to draft a graph, or load a skill's shipped graph.json."
+details = "Mode A spawns one decomposition sub-agent that turns the bare prompt into a draft folded-graph declaration with a real expand fan-out and gather reducer. Mode B loads an authored graph plus its fn modules directly."
+
+[[skills.divide-and-conquer.workflow]]
+name = "Validate the Graph"
+description = "Validate against the task-graph schema and dry-run init."
+details = "Write the draft to a temp file, validate against task-graph.schema.json, and dry-run task.mjs init to exercise the engine's validateGraph — rejecting unknown types, dangling deps, and missing output_schema."
+
+[[skills.divide-and-conquer.workflow]]
+name = "Human Review and Edit"
+description = "Present the validated draft for plan-mode review before running."
+details = "Surface the fan-out width, per-unit work, and gather step via the plan gate. The human may edit nodes, prompts, the unit list, or schemas before approving. Re-validate after any edit. Mode B skips this gate."
+
+[[skills.divide-and-conquer.workflow]]
+name = "Run the Scheduling Loop"
+description = "Drive the graph through the execute-plan scheduling loop."
+details = "init captures the GRAPH_ID, then ready / dispatch agent in the background / exec-node for fn, expand, and switch, honoring the concurrency window and the single-writer commit lock."
+
+[[skills.divide-and-conquer.workflow]]
+name = "Gather Results"
+description = "Reduce per-unit outputs with an all-resolved gather fn."
+details = "An fn reducer with require all-resolved gathers successes even when some children fail, so partial results always collect and one failure never sinks the run. Present the gathered result to the user."
